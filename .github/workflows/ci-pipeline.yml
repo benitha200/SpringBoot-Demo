@@ -43,7 +43,7 @@ jobs:
 
       # Upload .jar artifact
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3  # important: use v2 here
+        uses: actions/upload-artifact@v4  # important: use v2 here
         with:
           name: build-artifact
           path: target/*.jar

@@ -1,0 +1,56 @@
+name: Java CI Pipeline
+
+# Trigger the pipeline on push and pull_request events
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check out the code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Set up Java with actions/setup-java
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'adoptopenjdk'
+
+    # Cache dependencies to speed up builds
+    - name: Cache Maven dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    # Build the application using Maven
+    - name: Build with Maven
+      run: mvn clean install -DskipTests=true
+
+    # Run tests
+    - name: Run tests with Maven
+      run: mvn test
+
+    # Analyze code quality with SonarCloud (Optional)
+    - name: SonarCloud Analysis
+      uses: SonarSource/sonarcloud-github-action@v1.6
+      with:
+        token: ${{ secrets.SONAR_TOKEN }}
+
+    # Store build artifact (e.g., the .jar file) using GitHub Actions' upload-artifact
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifact
+        path: target/*.jar

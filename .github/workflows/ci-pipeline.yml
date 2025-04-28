@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin' # temurin is recommended now
+          distribution: 'temurin'
 
       # Cache Maven dependencies
       - name: Cache Maven packages
@@ -41,21 +41,9 @@ jobs:
       - name: Run tests with Maven
         run: mvn test
 
-      # Analyze with SonarCloud
-    #   - name: SonarCloud Scan
-    #     uses: SonarSource/sonarcloud-github-action@v2
-    #     with:
-    #       projectBaseDir: .
-    #     env:
-    #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #       SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-    #       SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
-
-
-      
-          # Upload .jar artifact
+      # Upload .jar artifact
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2  # important: use v2 here
         with:
           name: build-artifact
           path: target/*.jar

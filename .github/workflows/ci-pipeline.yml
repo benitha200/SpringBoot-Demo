@@ -33,24 +33,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Build the application
-      - name: Build with Maven
-        run: mvn clean install -DskipTests=true
-
-      # Run tests
-      - name: Run tests with Maven
-        run: mvn test
-
-      # SonarCloud Scan
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.host.url=https://sonarcloud.io
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # Build, test and SonarCloud scan using Maven
+      - name: Build, Test, and Analyze with SonarCloud
+        run: mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+              -DskipTests=false \
+              -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+              -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
       # Upload .jar artifact
       - name: Upload build artifact

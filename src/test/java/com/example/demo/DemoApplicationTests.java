@@ -6,8 +6,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class DemoApplicationTests {
 
-	@Test
-	void contextLoads() {
-		// Verifies the Spring context starts correctly
-	}
+    @Test
+    void contextLoads() {
+    }
+
+    @Test
+    void mainMethodRuns() {
+        DemoApplication.main(new String[]{});
+    }
 }

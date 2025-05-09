@@ -21,6 +21,6 @@ public class HelloControllerTest {
     void helloEndpointShouldReturnGreeting() throws Exception {
         mockMvc.perform(get("/"))
                .andExpect(status().isOk())
-               .andExpect(content().string("👋 Hello from Spring Boot!Woow this is updated"));
+               .andExpect(content().string("👋 Hello from Spring Boot!\\nWoow this is updated!"));
     }
 }

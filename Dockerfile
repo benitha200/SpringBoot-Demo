@@ -5,10 +5,10 @@
 # ENTRYPOINT ["java", "-jar", "/app.jar"]
 
 
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre
 
 # Create a non-root user and group
-RUN addgroup --system admin && adduser --system --ingroup admin louange
+RUN addgroup admin && adduser --ingroup admin louange
 
 # Set the working directory for louange
 WORKDIR /home/louange

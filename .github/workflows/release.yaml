@@ -56,6 +56,9 @@ jobs:
 
       - name: Commit and push updated deployment.yaml
         run: |
+          git fetch origin main
+          git checkout -B main origin/main
           git add k8s/deployment.yaml
           git commit -m "Update image tag to ${GITHUB_REF_NAME:-${GITHUB_REF#refs/tags/}}"
-          git push origin HEAD:main
+          git push origin main
+

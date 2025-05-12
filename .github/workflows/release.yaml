@@ -56,9 +56,15 @@ jobs:
 
       - name: Commit and push updated deployment.yaml
         run: |
-          git fetch origin main
-          git checkout -B main origin/main
+          TAG="${GITHUB_REF_NAME:-${GITHUB_REF#refs/tags/}}"
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
           git add k8s/deployment.yaml
-          git commit -m "Update image tag to ${GITHUB_REF_NAME:-${GITHUB_REF#refs/tags/}}"
-          git push origin main
+          git commit -m "Update image tag to ${TAG}"
+
+          git fetch origin main
+          git pull origin main --rebase 
+          git push origin HEAD:main
+
 

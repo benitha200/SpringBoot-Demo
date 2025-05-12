@@ -63,6 +63,6 @@ jobs:
             # Update the deployment file
             git add k8s/deployment.yaml
             git commit -m "Update image tag to ${TAG}"
-            git push --force origin HEAD:main
+            git push --force origin HEAD:main #force push
 
 

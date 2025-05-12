@@ -2,14 +2,20 @@ package com.example.demo;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(HelloController.class)
 public class HelloControllerTest {
@@ -18,9 +24,31 @@ public class HelloControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void helloEndpointShouldReturnGreeting() throws Exception {
-        mockMvc.perform(get("/"))
+    void textEndpointShouldReturnGreeting() throws Exception {
+        mockMvc.perform(get("/").accept(MediaType.TEXT_PLAIN))
                .andExpect(status().isOk())
-               .andExpect(content().string("👋👋 Hello from Spring Boot!\nWoow this is updated!!\nThis is triggered by argo cd"));
+               .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+               .andExpect(content().string(containsString("Hello from Spring Boot")))
+               .andExpect(content().string(containsString("Successfully updated")))
+               .andExpect(content().string(containsString("ArgoCD")));
+    }
+    
+    @Test
+    void jsonEndpointShouldReturnGreetingObject() throws Exception {
+        mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.greeting").value("Hello from Spring Boot!"))
+               .andExpect(jsonPath("$.updated").value(true))
+               .andExpect(jsonPath("$.timestamp").isString())
+               .andExpect(jsonPath("$.deployment").value("ArgoCD"));
+    }
+    
+    @Test
+    void healthEndpointShouldReturnUpStatus() throws Exception {
+        mockMvc.perform(get("/health"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.status").value("UP"))
+               .andExpect(jsonPath("$.timestamp").isString());
     }
 }

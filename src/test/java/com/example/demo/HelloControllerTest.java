@@ -25,7 +25,7 @@ public class HelloControllerTest {
 
     @Test
     void textEndpointShouldReturnGreeting() throws Exception {
-        mockMvc.perform(get("/").accept(MediaType.TEXT_PLAIN))
+        mockMvc.perform(get("/greeting").accept(MediaType.TEXT_PLAIN))
                .andExpect(status().isOk())
                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
                .andExpect(content().string(containsString("Hello from Spring Boot")))

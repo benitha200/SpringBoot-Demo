@@ -21,7 +21,7 @@ public class HelloController {
      * 
      * @return String greeting message
      */
-    @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/greeting", produces = MediaType.TEXT_PLAIN_VALUE)
     public String helloText() {
         return "👋👋 Hello from Spring Boot!\n" + 
                "Successfully updated: " + getCurrentTime() + "\n" +

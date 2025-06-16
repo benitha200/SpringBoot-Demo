@@ -66,7 +66,7 @@
 #             git push --force origin HEAD:main #force push
 
 
-name: Release Docker Image and Update Samplechart values with new tag
+name: Release Docker Image
 
 on:
   push:
@@ -114,22 +114,41 @@ jobs:
           TAG="${GITHUB_REF_NAME:-${GITHUB_REF#refs/tags/}}"
           IMAGE_NAME="${{ secrets.IMAGE_NAME }}"
           echo "Updating image to $IMAGE_NAME:$TAG"
-          sed -i "s|^\(\s*image:\s*\).*\$|\1${IMAGE_NAME}:${TAG}|" k8s/deployment.yaml
+          sed -i "s|^\(\s*image:\s*\).*$|\1${IMAGE_NAME}:${TAG}|" k8s/deployment.yaml
           cat k8s/deployment.yaml
 
-      - name: Configure Git
+      - name: Configure Git for current repo
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
       - name: Commit and push updated deployment.yaml
         run: |
-            TAG="${GITHUB_REF_NAME:-${GITHUB_REF#refs/tags/}}"
-            git config user.name "GitHub Actions"
-            git config user.email "actions@github.com"
-            
-            # Update the deployment file
-            git add k8s/deployment.yaml
-            git commit -m "Update image tag to ${TAG}"
-            git push --force origin HEAD:main #force push
+          TAG="${GITHUB_REF_NAME:-${GITHUB_REF#refs/tags/}}"
+          git add k8s/deployment.yaml
+          git commit -m "Update image tag to ${TAG}"
+          git push --force origin HEAD:main
+
+      - name: Clone samplecharts repo
+        run: git clone https://github.com/benitha200/samplecharts.git
+
+      - name: Update values.yaml with new tag
+        run: |
+          TAG="${GITHUB_REF_NAME:-${GITHUB_REF#refs/tags/}}"
+          VALUES_FILE="samplecharts/charts/springboot-chart/values.yaml"
+          echo "Updating image tag in $VALUES_FILE to $TAG"
+          sed -i "s|^\(\s*tag:\s*\).*$|\1${TAG}|" "$VALUES_FILE"
+          cat "$VALUES_FILE"
+
+      - name: Commit and push updated values.yaml to samplecharts repo
+        working-directory: samplecharts
+        env:
+          GITHUB_TOKEN: ${{ secrets.SAMPLECHARTS_PAT }}
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add charts/springboot-chart/values.yaml
+          git commit -m "Update springboot-chart image tag to ${TAG}"
+          git push origin main
+
 

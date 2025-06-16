@@ -36,7 +36,7 @@ public class HelloController {
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> helloJson() {
         Map<String, Object> response = new HashMap<>();
-        response.put("greeting", "Hello from Spring Boot!");
+        response.put("greeting", "Hello from Spring Boot!!");
         response.put("updated", true);
         response.put("timestamp", getCurrentTime());
         response.put("deployment", "ArgoCD");

@@ -38,7 +38,7 @@ public class HelloControllerTest {
         mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.greeting").value("Hello from Spring Boot!"))
+               .andExpect(jsonPath("$.greeting").value("Hello from Spring Boot!!"))
                .andExpect(jsonPath("$.updated").value(true))
                .andExpect(jsonPath("$.timestamp").isString())
                .andExpect(jsonPath("$.deployment").value("ArgoCD"));

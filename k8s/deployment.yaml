@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: springboot
-        image: iyuyisenga/springboot-demo:v2.1.8
+        image: iyuyisenga/springboot-demo:v2.1.9
         ports:
         - containerPort: 8081

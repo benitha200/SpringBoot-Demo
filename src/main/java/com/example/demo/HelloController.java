@@ -1,7 +1,11 @@
 package com.example.demo;
 
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.micrometer.core.instrument.MeterRegistry;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
@@ -9,12 +13,36 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+
 /**
  * Controller for handling hello endpoint requests.
  * Enhanced to provide both text and JSON responses.
  */
 @RestController
 public class HelloController {
+
+    private final Counter errorCounter;
+    private final MeterRegistry registry;
+
+    public HelloController(MeterRegistry registry) {
+        this.registry = registry;
+        this.errorCounter = Counter.builder("api_errors_total")
+            .description("Total API errors")
+            .tags("controller", "HelloController")
+            .register(registry);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception e) {
+        errorCounter.increment();
+        Map<String, String> response = new HashMap<>();
+        response.put("error", e.getMessage());
+        return ResponseEntity.status(500).body(response);
+    }
 
     /**
      * Returns a greeting message in plain text format.

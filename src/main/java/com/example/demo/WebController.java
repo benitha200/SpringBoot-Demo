@@ -2,15 +2,37 @@ package com.example.demo;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import io.micrometer.core.instrument.MeterRegistry;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 
 /**
  * Controller for serving HTML pages using Thymeleaf templates.
  */
 @Controller
 public class WebController {
+
+    private final Counter pageErrorCounter;
+
+    public WebController(MeterRegistry registry) {
+        this.pageErrorCounter = Counter.builder("page_errors_total")
+            .description("Total page rendering errors")
+            .register(registry);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handlePageException(Exception e, Model model) {
+        pageErrorCounter.increment();
+        model.addAttribute("error", "Page rendering failed");
+        return "error";
+    }
 
     /**
      * Redirects root path to home page.

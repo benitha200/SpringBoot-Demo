@@ -1,9 +1,32 @@
-apiVersion: apps/v1
-kind: Deployment
+# ====== use default rollout =====
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: springboot-demo
+#   labels:
+#     app: springboot-demo
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: springboot-demo
+#   template:
+#     metadata:
+#       labels:
+#         app: springboot-demo
+#     spec:
+#       containers:
+#       - name: springboot
+#         image: iyuyisenga/springboot-demo:v2.2.7
+#         ports:
+#         - containerPort: 8081
+
+
+# ====== rollout using blue-green ==========
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: springboot-demo
-  labels:
-    app: springboot-demo
 spec:
   replicas: 1
   selector:
@@ -15,7 +38,12 @@ spec:
         app: springboot-demo
     spec:
       containers:
-      - name: springboot
-        image: iyuyisenga/springboot-demo:v2.2.7
-        ports:
-        - containerPort: 8081
+        - name: springboot
+          image: iyuyisenga/springboot-demo:v2.2.7
+          ports:
+            - containerPort: 8081
+  strategy:
+    blueGreen:
+      activeService: springboot-active
+      previewService: springboot-preview
+      autoPromotionEnabled: false  # Set to true for automatic promotion

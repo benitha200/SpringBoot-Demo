@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(148, 163, 184, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .nav a {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.2);
+        }
+        
+        .nav a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 114, 128, 0.3);
+            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+        }
+        
+        .nav a.active {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            box-shadow: 0 4px 15px rgba(55, 65, 81, 0.3);
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(226, 232, 240, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(148, 163, 184, 0.15);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .info-card h3 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .info-card .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(100, 116, 139, 0.2);
+        }
+        
+        .status {
+            color: #059669;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .timestamp {
+            color: #64748b;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        
+        .deployment-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(55, 65, 81, 0.2);
+        }
+        
+        .welcome-section {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(100, 116, 139, 0.05) 0%, rgba(71, 85, 105, 0.05) 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(226, 232, 240, 0.3);
+        }
+        
+        .welcome-section h2 {
+            color: #1e293b;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .welcome-section p {
+            color: #475569;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .performance-bar {
+            margin-top: 15px;
+        }
+        
+        .performance-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+            padding: 3px;
+            box-shadow: inset 0 2px 4px rgba(148, 163, 184, 0.1);
+        }
+        
+        .performance-fill {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            height: 12px;
+            width: 85%;
+            border-radius: 7px;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+            transition: width 0.8s ease;
+        }
+        
+        .performance-text {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .nav {
+                gap: 10px;
+            }
+            
+            .nav a {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .welcome-section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Subtle animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .info-card:nth-child(1) { animation-delay: 0.1s; }
+        .info-card:nth-child(2) { animation-delay: 0.2s; }
+        .info-card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Spring Boot Application</h1>
+            <p class="subtitle">Modern Web Application Platform</p>
+        </div>
+        
+        <div class="content">
+            <nav class="nav">
+                <a href="/home" class="active">Home</a>
+                <a href="/about">About</a>
+                <a href="/health">Health</a>
+            </nav>
+
+            <div class="welcome-section">
+                <h2 th:text="${greeting}">Welcome to Our Platform</h2>
+                <p>Experience the power of modern web development with Spring Boot. Our application delivers robust performance and seamless user experience.</p>
+            </div>
+            
+            <div class="card-grid">
+                <div class="info-card">
+                    <div class="icon">✅</div>
+                    <h3>System Status</h3>
+                    <p class="status" th:text="${status}">All systems operational</p>
+                    <p class="timestamp">Last updated: <span th:text="${timestamp}">Just now</span></p>
+                </div>
+
+                <div class="info-card">
+                    <div class="icon">🚀</div>
+                    <h3>Deployment</h3>
+                    <p>Powered by <span class="deployment-badge" th:text="${deployment}">ArgoCD</span></p>
+                    <p style="color: #64748b; margin-top: 12px;">Automated continuous deployment ensures reliable and efficient updates.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="icon">⚡</div>
+                    <h3>Performance</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Optimized for speed and reliability with enterprise-grade architecture.</p>
+                    <div class="performance-bar">
+                        <div class="performance-track">
+                            <div class="performance-fill"></div>
+                        </div>
+                        <p class="performance-text">85% Performance Score</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

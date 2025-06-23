@@ -23,17 +23,18 @@ public class HelloController {
      */
     @GetMapping(value = "/greeting", produces = MediaType.TEXT_PLAIN_VALUE)
     public String helloText() {
-        return "👋👋 Hello from Spring Boot!!\n" + 
-               "Successfully updated: " + getCurrentTime() + "\n" +
+        return "👋👋 Hello from Spring Boot!!\n" +
+                "Successfully updated: " + getCurrentTime() + "\n" +
                "This deployment was triggered by ArgoCD";
     }
-    
+        
     /**
      * Returns a greeting message in JSON format.
+     * Changed from "/" to "/api" to avoid conflict with home page
      * 
      * @return ResponseEntity containing greeting data
      */
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> helloJson() {
         Map<String, Object> response = new HashMap<>();
         response.put("greeting", "Hello from Spring Boot!!");
@@ -43,7 +44,7 @@ public class HelloController {
         
         return ResponseEntity.ok(response);
     }
-    
+        
     /**
      * Returns the server health status.
      * 
@@ -57,7 +58,7 @@ public class HelloController {
         
         return ResponseEntity.ok(status);
     }
-    
+        
     /**
      * Gets the current formatted time.
      * 

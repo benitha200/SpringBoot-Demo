@@ -13,6 +13,16 @@ import java.time.format.DateTimeFormatter;
 public class WebController {
 
     /**
+     * Redirects root path to home page.
+     * 
+     * @return String redirect to home endpoint
+     */
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/home";
+    }
+
+    /**
      * Serves the main webpage.
      * 
      * @param model Model object to pass data to the view

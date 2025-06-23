@@ -32,10 +32,11 @@ public class HelloControllerTest {
                .andExpect(content().string(containsString("Successfully updated")))
                .andExpect(content().string(containsString("ArgoCD")));
     }
-    
+        
     @Test
     void jsonEndpointShouldReturnGreetingObject() throws Exception {
-        mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
+        // Updated from "/" to "/api"
+        mockMvc.perform(get("/api").accept(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.greeting").value("Hello from Spring Boot!!"))
@@ -43,7 +44,7 @@ public class HelloControllerTest {
                .andExpect(jsonPath("$.timestamp").isString())
                .andExpect(jsonPath("$.deployment").value("ArgoCD"));
     }
-    
+        
     @Test
     void healthEndpointShouldReturnUpStatus() throws Exception {
         mockMvc.perform(get("/health"))

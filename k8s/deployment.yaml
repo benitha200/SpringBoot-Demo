@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: springboot
-          image: iyuyisenga/springboot-demo:v2.2.7 # Update this tag when deploying new versions
+          image: iyuyisenga/springboot-demo:v2.2.8
           ports:
             - containerPort: 8081
   strategy:

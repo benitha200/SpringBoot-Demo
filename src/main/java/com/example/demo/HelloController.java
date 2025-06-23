@@ -23,7 +23,7 @@ public class HelloController {
      */
     @GetMapping(value = "/greeting", produces = MediaType.TEXT_PLAIN_VALUE)
     public String helloText() {
-        return "👋👋 Hello from Spring Boot!\n" + 
+        return "👋👋 Hello from Spring Boot!!\n" + 
                "Successfully updated: " + getCurrentTime() + "\n" +
                "This deployment was triggered by ArgoCD";
     }

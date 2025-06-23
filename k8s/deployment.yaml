@@ -23,12 +23,14 @@
 
 
 # ====== rollout using blue-green ==========
+# rollout.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: springboot-demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: springboot-demo
@@ -39,11 +41,12 @@ spec:
     spec:
       containers:
         - name: springboot
-          image: iyuyisenga/springboot-demo:v2.2.7
+          image: iyuyisenga/springboot-demo:v2.2.7 # Update this tag when deploying new versions
           ports:
             - containerPort: 8081
   strategy:
     blueGreen:
-      activeService: springboot-active
-      previewService: springboot-preview
-      autoPromotionEnabled: false  # Set to true for automatic promotion
+      activeService: springboot-active        # Live production traffic
+      previewService: springboot-preview      # Preview new version
+      autoPromotionEnabled: false             # Requires manual promotion (safer for testing)
+      scaleDownDelaySeconds: 30               # Delay before scaling down old pods after promotion

@@ -145,5 +145,3 @@ jobs:
           git add charts/springboot-chart/values.yaml
           git commit -m "Update springboot-chart image tag to ${GITHUB_REF_NAME}"
           git push origin main
-
-

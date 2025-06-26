@@ -195,6 +195,46 @@
             font-size: 0.85rem;
             margin-top: 8px;
         }
+
+        .security-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(100, 116, 139, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
         
         @media (max-width: 768px) {
             .header h1 {
@@ -222,6 +262,10 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Subtle animations */
@@ -243,6 +287,7 @@
         .info-card:nth-child(1) { animation-delay: 0.1s; }
         .info-card:nth-child(2) { animation-delay: 0.2s; }
         .info-card:nth-child(3) { animation-delay: 0.3s; }
+        .info-card:nth-child(4) { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
@@ -288,6 +333,26 @@
                             <div class="performance-fill"></div>
                         </div>
                         <p class="performance-text">85% Performance Score</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="icon">🔒</div>
+                    <h3>Security & Monitoring</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">
+                        <span class="security-badge">SSL</span>
+                        <span class="security-badge">OAuth2</span>
+                        Enterprise-grade security protocols active.
+                    </p>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <span class="metric-value">99.9%</span>
+                            <div class="metric-label">Uptime</div>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-value">24/7</span>
+                            <div class="metric-label">Monitoring</div>
+                        </div>
                     </div>
                 </div>
             </div>

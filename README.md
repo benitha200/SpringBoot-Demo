@@ -34,5 +34,5 @@ These secrets must be stored securely under **Settings > Secrets and variables >
 To trigger the release workflow and publish a Docker image:
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.0.1
+git push origin v1.0.1
